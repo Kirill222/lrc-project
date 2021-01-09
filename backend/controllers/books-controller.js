@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Book = require("../models/book-model");
+const HttpError = require("../models/http-error");
 
 //POST - create a book
 const createBook = async (req, res, next) => {
@@ -17,7 +18,8 @@ const createBook = async (req, res, next) => {
   try {
     await createdBook.save();
   } catch (error) {
-    console.log(error);
+    error = new HttpError("The book cannot be saved, try again later", 500);
+    return next(error);
   }
 
   res.status(201);
@@ -29,7 +31,11 @@ const getBooks = async (req, res, next) => {
   try {
     books = await Book.find();
   } catch (error) {
-    console.log(error);
+    error = new HttpError(
+      "Books cannot be accessed, somethihg went wrong",
+      404
+    );
+    return next(error);
   }
 
   res.json({ books: books.map((book) => book.toObject({ getters: true })) });
@@ -43,7 +49,11 @@ const updateBook = async (req, res, next) => {
   try {
     updatedBook = await Book.findById(bookId);
   } catch (error) {
-    console.log(error);
+    error = new HttpError(
+      "There is no such a book in database to be updated",
+      500
+    );
+    return next(error);
   }
 
   updatedBook.title = title;
@@ -68,7 +78,8 @@ const deleteBook = async (req, res, next) => {
   try {
     bookToDelete = await Book.findById(bookId);
   } catch (error) {
-    console.log(error);
+    error = new HttpError("The book to delete was not found", 500);
+    return next(error);
   }
 
   try {
