@@ -1,9 +1,20 @@
 const mongoose = require("mongoose");
 const Book = require("../models/book-model");
 const HttpError = require("../models/http-error");
+const { validationResult } = require("express-validator");
 
 //POST - create a book
 const createBook = async (req, res, next) => {
+  //validation
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new HttpError(
+      "Invalid input passed, please, check your data",
+      422
+    );
+    return next(error);
+  }
+
   const { title, author, isbn, edition, cover } = req.body;
 
   const createdBook = new Book({
