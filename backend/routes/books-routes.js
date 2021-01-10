@@ -1,12 +1,14 @@
 const express = require("express");
 const bookControllers = require("../controllers/books-controller");
 const { check } = require("express-validator");
+const fileUpload = require("../middleware/file-upload");
 
 const router = express.Router();
 
 //POST - create a book
 router.post(
   "/books",
+  fileUpload.single("cover"),
   [
     check("title").not().isEmpty().isLength({ min: 3 }),
     check("author").not().isEmpty(),

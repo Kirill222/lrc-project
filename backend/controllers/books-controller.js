@@ -22,8 +22,8 @@ const createBook = async (req, res, next) => {
     author,
     isbn,
     edition,
-    cover:
-      "https://cnet4.cbsistatic.com/img/aZRMn1itx4hHpDql5mNX_NTno0M=/940x0/2018/05/01/9acc5e96-f803-4735-9f88-68308fd898cb/fire-and-blood-game-of-thrones-book-cover.jpg",
+    // cover:
+    //   "https://cnet4.cbsistatic.com/img/aZRMn1itx4hHpDql5mNX_NTno0M=/940x0/2018/05/01/9acc5e96-f803-4735-9f88-68308fd898cb/fire-and-blood-game-of-thrones-book-cover.jpg",
   });
 
   try {

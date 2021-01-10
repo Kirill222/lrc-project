@@ -8,6 +8,9 @@ const server = express();
 
 server.use(bodyParser.json());
 
+//public folder
+server.use(express.static("./uploads"));
+
 server.use("/api", booksRoutes);
 
 //Error handling middleware for wrong routes:
