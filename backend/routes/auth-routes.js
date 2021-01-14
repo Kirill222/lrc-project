@@ -1,4 +1,5 @@
 const express = require("express");
+const bcrypt = require("bcryptjs"); //for hashing passwords
 const router = express.Router();
 const User = require("../models/user-model");
 const HttpError = require("../models/http-error");
@@ -16,10 +17,14 @@ router.post("/register", async (req, res, next) => {
   const emailExists = await User.findOne({ email: req.body.email });
   if (emailExists) return res.status(400).send("Email already exists");
 
+  //PASSWORD HASHING (with bcryptjs package)
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
   const user = new User({
     name: req.body.name,
     email: req.body.email,
-    password: req.body.password,
+    password: hashedPassword,
   });
 
   try {
