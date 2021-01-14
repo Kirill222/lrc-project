@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const booksRoutes = require("./routes/books-routes");
 const authRoutes = require("./routes/auth-routes");
 const HttpError = require("./models/http-error");
+const testRouteToDelete = require("./routes/private-route-temp");
 
 const server = express();
 
@@ -13,6 +14,7 @@ server.use(bodyParser.json());
 //public folder
 server.use(express.static("./uploads"));
 //ROUTES
+server.use("/api/testroutetodelete", testRouteToDelete);
 server.use("/api", authRoutes);
 server.use("/api", booksRoutes);
 

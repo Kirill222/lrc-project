@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs"); //for hashing passwords
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 const User = require("../models/user-model");
 const HttpError = require("../models/http-error");
@@ -54,6 +55,10 @@ router.post("/login", async (req, res, next) => {
   //CHECK IF THE PASSWORD IS CORRECT
   const validPass = await bcrypt.compare(req.body.password, user.password);
   if (!validPass) return res.status(400).send("Invalid password");
+
+  //CREATE AND ASSIGN TOKEN
+  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
+  res.header("auth-token", token).send(token);
 
   res.send("Logged in");
 });
