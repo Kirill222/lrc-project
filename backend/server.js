@@ -1,7 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 const booksRoutes = require("./routes/books-routes");
+const authRoutes = require("./routes/auth-routes");
 const HttpError = require("./models/http-error");
 
 const server = express();
@@ -10,7 +12,8 @@ server.use(bodyParser.json());
 
 //public folder
 server.use(express.static("./uploads"));
-
+//ROUTES
+server.use("/api", authRoutes);
 server.use("/api", booksRoutes);
 
 //Error handling middleware for wrong routes:
@@ -28,12 +31,14 @@ server.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occured" });
 });
 
+//initiate DOTENV - before connecting to DB because we will use it inside
+dotenv.config();
 //connecting to DB
 mongoose
-  .connect(
-    "mongodb+srv://Drunkfrog:zkmd1988@cluster0.o50hs.mongodb.net/lrc?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
+  .connect(process.env.DB_CONNECT, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     server.listen(5000);
   })
