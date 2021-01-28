@@ -11,6 +11,20 @@ const server = express();
 
 server.use(bodyParser.json());
 
+//handeling CORS errors:
+server.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if (res.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    return res.status(200).json({});
+  }
+  next();
+});
+
 //public folder
 server.use(express.static("./uploads"));
 //ROUTES
