@@ -26,7 +26,8 @@ server.use((req, res, next) => {
 });
 
 //public folder
-server.use(express.static("./uploads"));
+//this folder also contains favicon
+server.use(express.static(__dirname + "/uploads"));
 //ROUTES
 server.use("/api/testroutetodelete", testRouteToDelete);
 server.use("/api", authRoutes);
